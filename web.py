@@ -1,120 +1,78 @@
 import streamlit as st
 
 # 1. Cấu hình trang
-st.set_page_config(page_title="Món quà từ Thỏ", page_icon="🌸", layout="centered")
+st.set_page_config(page_title="Quà tặng đặc biệt", page_icon="🐱", layout="centered")
 
-# 2. Khởi tạo trạng thái
+# 2. Khởi tạo trạng thái (Để chia màn hình rõ ràng)
 if 'step' not in st.session_state:
-    st.session_state.step = 'keo_day'
+    st.session_state.step = 'trang_keo_day'
 
-# 3. CSS: Giao diện Cute + Hiệu ứng Hoa Anh Đào & Lá rơi
+# 3. Giao diện CSS (Hoa rơi lấp lánh)
 st.markdown("""
     <style>
-    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Zeyada&display=swap');
-
-    .stApp {
-        background-color: #fff0f3;
-        overflow: hidden;
+    @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap');
+    .stApp { background-color: #fff0f3; overflow: hidden; }
+    .cherry-blossom { position: fixed; top: -10%; z-index: 9999; user-select: none; animation: fall linear infinite; }
+    @keyframes fall { 0% { transform: translateY(0) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(360deg); opacity: 0; } }
+    .main-card {
+        background: white; padding: 30px; border-radius: 30px;
+        box-shadow: 0 10px 30px rgba(255, 182, 193, 0.5);
+        text-align: center; border: 2px solid #ffccd5;
     }
-
-    /* Hiệu ứng rơi */
-    .falling {
-        position: fixed;
-        top: -10%;
-        z-index: 9999;
-        user-select: none;
-        animation: fall linear infinite;
-    }
-
-    @keyframes fall {
-        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-    }
-
-    .f1 { left: 5%;  animation-duration: 7s; font-size: 20px; }
-    .f2 { left: 20%; animation-duration: 10s; font-size: 25px; animation-delay: 2s; }
-    .f3 { left: 40%; animation-duration: 8s; font-size: 18px; animation-delay: 4s; }
-    .f4 { left: 60%; animation-duration: 12s; font-size: 22px; animation-delay: 1s; }
-    .f5 { left: 80%; animation-duration: 9s; font-size: 24px; animation-delay: 3s; }
-    .f6 { left: 90%; animation-duration: 11s; font-size: 20px; animation-delay: 5s; }
-
-    /* Bức thư dập dềnh */
-    .letter-paper {
-        background-color: #ffffff;
-        padding: 40px;
-        border-radius: 30px;
-        border: 4px dotted #ffccd5;
-        box-shadow: 0px 10px 25px rgba(255, 182, 193, 0.4);
-        margin: 20px auto;
-        max-width: 500px;
-        animation: float 3s ease-in-out infinite;
-        position: relative;
-        z-index: 10;
-    }
-
-    @keyframes float {
-        0%, 100% { transform: translateY(0px); }
-        50% { transform: translateY(-15px); }
-    }
-
-    .letter-text { font-family: 'Quicksand', sans-serif; color: #ff758f; font-size: 18px; }
-    .signature { font-family: 'Zeyada', cursive; font-size: 35px; color: #ff4d6d; text-align: right; }
-
+    .wish-text { font-family: 'Quicksand', sans-serif; color: #ff758f; font-size: 20px; line-height: 1.6; }
+    .signature { font-family: 'Dancing Script', cursive; font-size: 35px; color: #ff4d6d; text-align: right; }
     .stButton>button {
-        background-color: #ffb3c1;
-        color: white;
-        border-radius: 20px;
-        border: none;
-        padding: 10px 25px;
+        background: linear-gradient(45deg, #ff758f, #ffb3c1); color: white;
+        border-radius: 25px; border: none; padding: 12px 40px; font-weight: bold;
     }
     </style>
-
-    <div class="falling f1">🌸</div>
-    <div class="falling f2">🍃</div>
-    <div class="falling f3">🌸</div>
-    <div class="falling f4">🍂</div>
-    <div class="falling f5">🌸</div>
-    <div class="falling f6">🍁</div>
+    <div class="cherry-blossom" style="left:15%; animation-duration:7s;">🌸</div>
+    <div class="cherry-blossom" style="left:55%; animation-duration:10s;">✨</div>
+    <div class="cherry-blossom" style="left:85%; animation-duration:8s;">🌸</div>
     """, unsafe_allow_html=True)
 
-# --- TRANG 1: KÉO DÂY ---
-if st.session_state.step == 'keo_day':
-    st.markdown("<h1 style='text-align: center; color: #ff758f;'>🐰 Thỏ con chuyển phát... ✨</h1>", unsafe_allow_html=True)
-    # Đã đổi key thành rabbit_run_v2
-    choice = st.select_slider("", options=["🐰🌱", " 🐾🌿", "  🐾🍀", "   🐾🌷", "    🐰🌸"], key="rabbit_run_v2")
-    if "🌸" in choice:
-        st.session_state.step = 'mo_thu'
-        st.balloons()
+# Link sticker của bạn
+capoo_sticker = "https://anhtomau.com/wp-content/uploads/2025/12/Sticker-cute-dong-dang-yeu.gif"
+
+# --- LOGIC ĐIỀU HƯỚNG CHỈ 1 LUỒNG DUY NHẤT ---
+
+if st.session_state.step == 'trang_keo_day':
+    # MÀN HÌNH 1: CHỈ CÓ 1 THANH KÉO
+    st.markdown("<h2 style='text-align: center; color: #ff758f;'>🐰 Thỏ con chuyển phát quà... ✨</h2>", unsafe_allow_html=True)
+    st.image(capoo_sticker, width=250)
+    keo = st.select_slider("Kéo chú thỏ sang phải để nhận quà:", 
+                           options=["🐰🌱", " 🐾🌿", "  🐾🍀", "   🐾🌷", "    🐰🌸"], 
+                           key="slider_unique_final")
+    if "🌸" in keo:
+        st.session_state.step = 'trang_mo_thu'
         st.rerun()
 
-# --- TRANG 2: PHONG THƯ ---
-elif st.session_state.step == 'mo_thu':
-    st.markdown("<div style='text-align: center; margin-top: 50px;'>", unsafe_allow_html=True)
-    st.markdown("<h2 style='color: #ff758f;'>🎀 Có một bức thư cho bạn nè...</h2>", unsafe_allow_html=True)
-    st.image("https://cdn-icons-png.flaticon.com/512/4720/4720458.png", width=160) 
-    # Đã đổi key thành open_btn_v2
-    if st.button("Mở thư xem ngay ✨", key="open_btn_v2"):
-        st.session_state.step = 'noi_dung'
+elif st.session_state.step == 'trang_mo_thu':
+    # MÀN HÌNH 2: CHỈ CÓ 1 NÚT BẤM
+    st.markdown("<div class='main-card'>", unsafe_allow_html=True)
+    st.image("https://cdn-icons-png.flaticon.com/512/4720/4720458.png", width=150)
+    st.markdown("<h2 style='color: #ff758f;'>🎀 Bạn có một bức thư tay!</h2>", unsafe_allow_html=True)
+    if st.button("Mở thư xem ngay ✨"):
+        st.session_state.step = 'trang_noi_dung'
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
-# --- TRANG 3: NỘI DUNG ---
-elif st.session_state.step == 'noi_dung':
-    st.markdown("<h2 style='text-align: center; color: #ff758f;'>🌷 Lời nhắn từ trái tim 🌷</h2>", unsafe_allow_html=True)
+elif st.session_state.step == 'trang_noi_dung':
+    # MÀN HÌNH 3: NỘI DUNG THƯ
+    st.balloons()
+    st.markdown("<div class='main-card'>", unsafe_allow_html=True)
+    st.image(capoo_sticker, width=150)
     st.markdown(f"""
-        <div class="letter-paper">
-            <div class="letter-text">
-                <p>Chào bạn nè! ✨</p>
-                <p>Thỏ con đã mang những cánh hoa và lá mùa thu đẹp nhất đến cho bạn đây.</p>
-                <p>Hy vọng không gian này làm bạn cảm thấy thật ấm áp và hạnh phúc!</p>
-            </div>
-            <div class="signature">Ký tên: [Tên của bạn] ♡</div>
+        <div style="text-align: left;">
+            <p class="wish-text">
+                Chúc bạn một ngày thật rực rỡ và tràn đầy niềm vui!<br><br>
+                Mong rằng nụ cười của bạn cũng sẽ đáng yêu như chú mèo Capoo này vậy. 🌸✨
+            </p>
+            <p class="signature">Ký tên: [Tên của bạn] ♡</p>
         </div>
     """, unsafe_allow_html=True)
-    
-    st.image("https://images.unsplash.com/photo-1516627145497-ae6968895b74?q=80&w=1000", caption="Gửi ngàn cái ôm 🧸")
-
-    # Đã đổi key thành back_btn_v2
-    if st.button("Đóng thư lại 🐰", key="back_btn_v2"):
-        st.session_state.step = 'keo_day'
+    if st.button("Đóng thư 🐾"):
+        st.session_state.step = 'trang_keo_day'
         st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+    
