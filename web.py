@@ -1,18 +1,17 @@
 import streamlit as st
 
 # 1. Cấu hình trang
-st.set_page_config(page_title="Quà tặng đặc biệt", page_icon="🐱", layout="centered")
+st.set_page_config(page_title="Quà tặng cho Chi", page_icon="💖", layout="centered")
 
 # 2. Khởi tạo trạng thái
 if 'step' not in st.session_state:
     st.session_state.step = 'trang_keo_day'
 
-# 3. Giao diện CSS (Sửa lỗi căn giữa, xóa khung trắng, tạo thiệp hình chữ nhật)
+# 3. Giao diện CSS (Căn giữa, Lá thiệp hình chữ nhật, Mũi tên chỉ hướng)
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Dancing+Script:wght@700&display=swap');
     
-    /* Nền trang */
     .stApp { background-color: #fff0f3; overflow: hidden; }
 
     /* Hiệu ứng hoa rơi */
@@ -22,63 +21,63 @@ st.markdown("""
     /* Căn giữa hình ảnh */
     .stImage > img { display: block; margin-left: auto; margin-right: auto; border-radius: 20px; }
 
-    /* Lá thiệp hình chữ nhật cho phần nội dung */
+    /* Mũi tên chỉ hướng kéo */
+    .arrow-guide {
+        text-align: center; color: #ff4d6d; font-size: 24px; font-weight: bold;
+        animation: bounce 1s infinite; margin-top: -10px;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(20px); }
+    }
+
+    /* Lá thiệp hình chữ nhật */
     .the-thiep {
-        background: white; 
-        padding: 40px; 
-        border-radius: 15px; /* Bo góc nhẹ tạo hình chữ nhật xịn */
-        box-shadow: 0 10px 25px rgba(255, 182, 193, 0.4);
-        text-align: center; 
-        border: 2px solid #ffccd5;
-        max-width: 500px;
-        margin: 20px auto;
+        background: white; padding: 40px; border-radius: 10px;
+        box-shadow: 0 10px 30px rgba(255, 182, 193, 0.5);
+        text-align: center; border: 2px solid #ffccd5;
+        max-width: 450px; margin: 20px auto;
         font-family: 'Quicksand', sans-serif;
     }
 
-    .wish-text { color: #ff758f; font-size: 20px; line-height: 1.6; font-weight: 500; }
-    .signature { font-family: 'Dancing Script', cursive; font-size: 32px; color: #ff4d6d; text-align: right; margin-top: 20px; }
+    .wish-text { color: #ff758f; font-size: 22px; line-height: 1.6; font-weight: 600; }
+    .signature { font-family: 'Dancing Script', cursive; font-size: 38px; color: #ff4d6d; text-align: right; margin-top: 25px; }
     
     /* Nút bấm */
     .stButton { text-align: center; }
     .stButton>button {
         background: linear-gradient(45deg, #ff758f, #ffb3c1); color: white;
-        border-radius: 25px; border: none; padding: 12px 40px; font-weight: bold;
-        transition: 0.3s;
+        border-radius: 50px; border: none; padding: 12px 50px; font-weight: bold;
     }
-    .stButton>button:hover { transform: scale(1.05); }
     
-    /* Xóa các khoảng trống thừa của Streamlit */
+    /* Xóa padding trắng thừa */
     .block-container { padding-top: 2rem; }
     </style>
 
-    <div class="cherry-blossom" style="left:15%; animation-duration:7s;">🌸</div>
-    <div class="cherry-blossom" style="left:45%; animation-duration:10s;">✨</div>
+    <div class="cherry-blossom" style="left:10%; animation-duration:7s;">🌸</div>
+    <div class="cherry-blossom" style="left:50%; animation-duration:9s;">✨</div>
     <div class="cherry-blossom" style="left:85%; animation-duration:8s;">🌸</div>
     """, unsafe_allow_html=True)
 
-# Link sticker con thỏ/mèo của bạn
 capoo_sticker = "https://anhtomau.com/wp-content/uploads/2025/12/Sticker-cute-dong-dang-yeu.gif"
 
 # --- LOGIC CHIA TRANG ---
 
 if st.session_state.step == 'trang_keo_day':
-    st.markdown("<h2 style='text-align: center; color: #ff4d6d;'>🐰 Thỏ con chuyển phát quà... ✨</h2>", unsafe_allow_html=True)
-    
-    # Hiển thị sticker ở giữa
+    st.markdown("<h2 style='text-align: center; color: #ff4d6d;'>🐰 Thỏ con mang quà tới nè... ✨</h2>", unsafe_allow_html=True)
     st.image(capoo_sticker, width=280)
     
-    st.write("")
-    keo = st.select_slider("Kéo chú thỏ sang phải để nhận quà:", 
-                           options=["🐰🌱", " 🐾🌿", "  🐾🍀", "   🐾🌷", "    🐰🌸"], 
-                           key="slider_final")
+    # Mũi tên chỉ hướng
+    st.markdown("<div class='arrow-guide'>Kéo sang đây nè ➔➔➔</div>", unsafe_allow_html=True)
+    
+    keo = st.select_slider("", options=["🐰🌱", " 🐾🌿", "  🐾🍀", "   🐾🌷", "    🐰🌸"], key="slider_final_v2")
+    
     if "🌸" in keo:
         st.session_state.step = 'trang_mo_thu'
         st.rerun()
 
 elif st.session_state.step == 'trang_mo_thu':
-    st.markdown("<h2 style='text-align: center; color: #ff4d6d;'>🎀 Bạn có một bức thư tay!</h2>", unsafe_allow_html=True)
-    
-    # Icon thư căn giữa, không còn khung trắng thừa
+    st.markdown("<h2 style='text-align: center; color: #ff4d6d;'>🎀 Chi có một bức thư tay!</h2>", unsafe_allow_html=True)
     st.image("https://cdn-icons-png.flaticon.com/512/4720/4720458.png", width=180)
     
     if st.button("Mở thư xem ngay ✨"):
@@ -88,15 +87,16 @@ elif st.session_state.step == 'trang_mo_thu':
 elif st.session_state.step == 'trang_noi_dung':
     st.balloons()
     
-    # Phần nội dung nằm trong lá thiệp hình chữ nhật
+    # Lá thiệp hình chữ nhật với nội dung của Huy
     st.markdown(f"""
         <div class="the-thiep">
             <img src="{capoo_sticker}" width="150" style="margin-bottom: 20px;">
             <p class="wish-text">
-                Chúc bạn một ngày thật rực rỡ và tràn đầy niềm vui!<br><br>
-                Mong rằng nụ cười của bạn cũng sẽ đáng yêu và tinh nghịch như chú mèo Capoo này vậy. 🌸✨
+                Gửi Chi, <br>
+                Anh chúc em 8/3 thật nhiều niềm vui, học giỏi càng ngày càng xinhh. <br>
+                Iu e ❤️
             </p>
-            <p class="signature">Ký tên: Huy ♡</p>
+            <p class="signature">QHuy ♡</p>
         </div>
     """, unsafe_allow_html=True)
     
